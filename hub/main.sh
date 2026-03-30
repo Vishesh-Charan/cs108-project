@@ -9,9 +9,14 @@ while true; do
         echo "You seem new here!!! Do you want to register (Y/N):"
         read ans
         if [[ "$ans" == "Y" ]]; then
-            echo "User:$usn1,Pass:$pass1_hash" >> users.tsv
-            echo "Welcome $usn1"
-            break
+            if [[ ${#pass1} < 7 ]]; then
+                echo "Password Too Short, should be more than or equal to 7 Characters"
+                continue
+            else
+                echo "User:$usn1,Pass:$pass1_hash" >> users.tsv
+                echo "Welcome $usn1"
+                break
+            fi
         else
             continue
         fi
@@ -33,9 +38,14 @@ while true; do
         echo "You seem new here!!! Do you want to register (Y/N):"
         read ans
         if [[ "$ans" == "Y" ]]; then
-            echo "User:$usn2,Pass:$pass2_hash" >> users.tsv
-            echo "Welcome $usn2"
-            break
+           if [[ ${#pass2} < 7 ]]; then
+                echo "Password Too Short, should be more than or equal to 7 Characters"
+                continue
+            else
+                echo "User:$usn2,Pass:$pass2_hash" >> users.tsv
+                echo "Welcome $usn2"
+                break
+            fi
         else
             continue
         fi
