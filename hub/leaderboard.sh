@@ -36,7 +36,7 @@ for g in $games; do
                 print p, win[p], loss[p], wl[p];
 
             }
-        }' history.csv | sort -t " | " -d -k 1
+        }' history.csv | sort -t "|" -d -k 1
     elif [ "$1" == "named" ];then
         echo "======= $(echo $g | tr '[:lower:]' '[:upper:]') ======="
         echo "Player | Wins | Losses | W/L Ratio"
@@ -62,7 +62,7 @@ for g in $games; do
                 print p, win[p], loss[p], wl[p];
 
             }
-        }' history.csv | sort -t " | " -dr -k 1
+        }' history.csv | sort -t "|" -dr -k 1
     else
         echo "======= $(echo $g | tr '[:lower:]' '[:upper:]') ======="
         echo "Player | Wins | Losses | W/L Ratio"
@@ -88,6 +88,8 @@ for g in $games; do
                 print p, win[p], loss[p], wl[p];
 
             }
-        }' history.csv | sort -t " | " -nr -k $col
+        }' history.csv | sort -t "|" -nr -k $col
     fi
 done
+
+

@@ -1,3 +1,5 @@
+#/bin/bash
+
 echo "Hello there players! Enter your usernames and passwords to start playing."
 while true; do
     echo "Player 1 username:"
@@ -9,7 +11,7 @@ while true; do
         echo "You seem new here!!! Do you want to register (Y/N):"
         read ans
         if [[ "$ans" == "Y" ]]; then
-            if [[ ${#pass1} < 7 ]]; then
+            if [[ ${#pass1} -lt 7 ]]; then
                 echo "Password Too Short, should be more than or equal to 7 Characters"
                 continue
             else
@@ -38,7 +40,7 @@ while true; do
         echo "You seem new here!!! Do you want to register (Y/N):"
         read ans
         if [[ "$ans" == "Y" ]]; then
-           if [[ ${#pass2} < 7 ]]; then
+           if [[ ${#pass2} -lt 7 ]]; then
                 echo "Password Too Short, should be more than or equal to 7 Characters"
                 continue
             else
@@ -57,5 +59,5 @@ while true; do
         break
     fi
 done
-python3 game.py $usn1 $usn2
+py game.py $usn1 $usn2
 
