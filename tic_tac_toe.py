@@ -4,6 +4,7 @@ import sys
 from general import general
 
 
+
 pg.init() 
 #initializing pygame
 
@@ -71,6 +72,21 @@ class tic_tac_toe(general):
         #checks if board is full
 
     def check_win(self,player):
+
+        set_of_subgrids=np.lib.stride_tricks.sliding_window_view(self.board, (5, 5))
+        #it is a inbuilt function which gives a 4D array, its 10*10 grid whose each cell is 5*5 corresponding subsquare
+        #set_of_subgrids is the variable representing all the possible 5*5 subsquares of the board
+        anti_subgrids=np.flip(set_of_subgrids,axis=3)
+        row_check=np.any(np.all(set_of_subgrids == player, axis=3))
+        col_check=np.any(np.all(set_of_subgrids == player, axis=2))
+        #axis represents the dimension we r considering in our 4D array
+
+        diag_check=np.any(np.all(np.diagonal(set_of_subgrids==player, axis1=2,axis2=3),axis=2))
+        antidiag_check=np.any(np.all(np.diagonal(anti_subgrids==player,axis1=2,axis2=3),axis=2))
+        if(row_check or col_check or diag_check or antidiag_check):
+            return True
+        return False
+        """
         #to check if the player wins
         #lined stack represents the number of X or O that should come in line to win
         lined_stack=5
@@ -90,7 +106,7 @@ class tic_tac_toe(general):
                 if np.all(np.diag(self.board,k)[r:r+lined_stack] == player) or np.all(np.diag(np.fliplr(self.board),k)[r:r+lined_stack] == player):
                     return True
         return False
-
+        """
     """
     NOTE- python recognizes only True and False, not true false, etc
     the k denotes the kth diagonal above or below the main diagonal
