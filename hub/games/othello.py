@@ -1,7 +1,11 @@
 import pygame as pg
 import numpy as np
 import sys
-from general import general
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+from game import general
 
 """
 NOTE- its very much similar logic as of tic tac toe
@@ -17,43 +21,34 @@ pg.init()
 width,hieght=800,800
 screen=pg.display.set_mode((width,hieght))
 pg.display.set_caption("Othello(Reversi)")
-bg_color=(28, 40, 51)
-screen.fill(bg_color)
 side=100
 row,colomn=8,8
-player1=sys.argv[1]
-player2=sys.argv[2]
-
-
 class Othello_Reversi(general):
-    def __init__(self):
+    def __init__(self,player1,player2):
         super().__init__(player1,player2)
         self.board=np.zeros((row,colomn)) 
         self.board[3,3],self.board[4,4]=1,1
         self.board[3,4],self.board[4,3]=2,2
 
-    def draw_lines(self):
-        
-        color,border_size,side=(52, 73, 94),5,100
-        #horizental
-        for i in range(1, row):
-            pg.draw.line(screen,color, (0, i * side), (width, i * side), border_size)
-        # vertical
-        for i in range(1, colomn):
-            pg.draw.line(screen,color, (i * side, 0), (i * side, hieght), border_size)
-            
+    def draw_board(self):
+        BG_Image= pg.image.load('Othello board.png')    
+        BG_Image=pg.transform.scale(BG_Image, (800,800))
+        screen.blit(BG_Image,(0,0))
     def draw_figures(self):
 
+        whitepiece= pg.image.load('White Othello.png')
+        blackpiece=pg.image.load('Black othello.png')
         circle_color1,circle_color2=(241, 196, 15),(1,1,1) 
-        radius,side=40,100
-
+        radius,side,offset=25,72,55
+        whitepiece=pg.transform.scale(whitepiece,(3*radius+15,3*radius+25))
+        blackpiece=pg.transform.scale(blackpiece,(3*radius+15,3*radius+25))
         for rows in range(row):
             for col in range(colomn):
                 if self.board[rows][col] == 1:
-                    pg.draw.circle(screen,circle_color1, (int(col * side + side//2), int(rows * side + side//2)), radius)
+                    screen.blit(whitepiece, (int(offset + col * side + side//2+7), int(offset + rows * side + side//2)))
 
                 elif self.board[rows][col] == 2:
-                    pg.draw.circle(screen,circle_color2, (int(col * side + side//2), int(rows * side + side//2)), radius)
+                    screen.blit(blackpiece, (int(offset + col * side + side//2+10), int(offset + rows * side + side//2)))
 
 
     def valid_move_and_update(self,row,col,player):
@@ -107,12 +102,12 @@ class Othello_Reversi(general):
 
                     for dr, dc in directions:
                         r,c=row+dr,col+dc
-                        
+                        opponentfound=False
                         while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] == (player%2)+1:
                             r += dr
                             c += dc
-                            
-                        if 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] == player:
+                            opponentfound=True
+                        if opponentfound and 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] == player:
                             notvalid=False
         return notvalid
 
@@ -131,9 +126,12 @@ class Othello_Reversi(general):
   
     
     def run(self):
-
+        #background music
+        pg.mixer.init()
+        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+        pg.mixer.music.play(-1)
         #initializing
-        self.draw_lines()
+        self.draw_board()
         player = 1
         game_over = False
 
@@ -170,17 +168,20 @@ class Othello_Reversi(general):
                     mouseX = event.pos[0]
                     mouseY = event.pos[1]
                     #storing the co ordinates of the pixel where the mouse got clicked
-                    clicked_row = int(mouseY // side)
-                    clicked_col = int(mouseX // side)
-  
-                    if(self.valid_move_and_update(clicked_row,clicked_col,player)):
-                        #switch()
-                        #player=player%2+1
-                        self.changeturn()
-                        player=self.current_turn
-                        #this whole part handles the main gameplay using our functions, etc
+                    offset = 95 #As the board doesn't fill the entire screen
+                    tile = 75
+
+                    # check if click is inside board
+                    if offset <= mouseX <= offset + 8 * tile and offset <= mouseY <= offset + 8 * tile:
+                        clicked_col = int((mouseX - offset) // tile)
+                        clicked_row = int((mouseY - offset) // tile)
+                        if(self.valid_move_and_update(clicked_row,clicked_col,player)):
+                            #switch()
+                            #player=player%2+1
+                            self.changeturn()
+                            player=self.current_turn
+                            #this whole part handles the main gameplay using our functions, etc
                 self.draw_figures()
             pg.display.update() 
 
-game=Othello_Reversi()
-game.run()
+
