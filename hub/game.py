@@ -20,13 +20,11 @@ class general:
         raise NotImplementedError 
 
 def getChosenGame(game_name, player1, player2):
-    
     if game_name.lower()=="connect4":
         from Games.connect4 import Connect4
         return Connect4(player1, player2)
     elif game_name.lower()=="othello":
-        from Games.othello import Othello
-        return Othello(player1, player2)
+        from Games.othello import Othello_Reversi
     elif game_name.lower()=="tictactoe":
         from Games.tictactoe import tic_tac_toe as TicTacToe 
         return TicTacToe(player1, player2)
@@ -137,12 +135,14 @@ def showmenu(screen):
 def leaderboard_data(screen,winner):
     screen = pygame.display.set_mode((1000, 900))
     font= pygame.font.Font("PressStart2P-Regular.ttf",48)
+    fontsmall= pygame.font.Font("PressStart2P-Regular.ttf",24)
     BG_COLOR = (30, 30, 60)          
-    #Top Text showing name of winner
+    #Top Text showing name of winner and the end text
     if winner=="Draw":
         text ="It's a Draw!" 
     else:
         text =f"{winner} Won!"
+    end_text="Press 'Enter' to continue"
     #Setting up a side menu with options of metrics to sort the leaderboard
     menu_font = pygame.font.Font("PressStart2P-Regular.ttf", 14)
     menu_width = 200
@@ -203,15 +203,18 @@ def leaderboard_data(screen,winner):
     pie_chart=pygame.image.load("pie_chart.png")
 
     bar_graph = pygame.transform.scale(bar_graph, (550, 350))
-    pie_chart = pygame.transform.scale(pie_chart, (550, 460))
+    pie_chart = pygame.transform.scale(pie_chart, (550, 360))
     #Displaying Everything
     while True:
         screen.fill(BG_COLOR)
         text_surface = font.render(text, True, (230, 230, 255))
         rect = text_surface.get_rect(center=(600//2, 40))
+        endtext_surface=fontsmall.render(end_text,True, (230,230,255))
+        end_rect=endtext_surface.get_rect(center=(500,885))
         screen.blit(text_surface, rect)
         screen.blit(bar_graph, (50, 90))
         screen.blit(pie_chart, (50, 470))
+        screen.blit(endtext_surface, end_rect)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -267,6 +270,21 @@ def postgame(screen,winner):
     text_surface = font.render(text, True, (255, 255, 255))  
     continue_button = pygame.Rect(350, 260, 200, 60)
     quit_button = pygame.Rect(350, 340, 200, 60)
+    # Load firework frames
+    frames = []
+    folder = "firework_frames"
+
+    for file in sorted(os.listdir(folder)):
+        if file.endswith(".png"):
+            img = pygame.image.load(os.path.join(folder, file)).convert_alpha()
+            img = pygame.transform.scale(img, (120, 120))
+            frames.append(img)
+
+    # Store active fireworks
+    fireworks = []  # [x, y, frame_index]
+
+    clock = pygame.time.Clock()
+
     while True:
         screen.fill(BG_COLOR)
         mouse_pos = pygame.mouse.get_pos()
@@ -280,6 +298,22 @@ def postgame(screen,winner):
             q_color=HOVER_COLOR
         else:
             q_color=NORMAL_COLOR
+        # Randomly spawn fireworks
+        if np.random.rand() < 0.03:
+            x = np.random.randint(50, 950)
+            y = np.random.randint(50, 650)
+            fireworks.append([x, y, 0])
+
+        # Draw & update fireworks
+        dt = clock.tick(60) / 1000  # time in seconds
+        for fw in fireworks:
+            x, y, frame_idx = fw
+            if frame_idx < len(frames):
+                screen.blit(frames[int(frame_idx)], (x, y))
+                fw[2]+=8*dt
+
+        # remove finished ones
+        fireworks = [fw for fw in fireworks if fw[2] < len(frames)]
         
         screen.blit(text_surface,(300,150))
         pygame.draw.rect(screen,c_color,continue_button,3)
