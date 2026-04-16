@@ -25,6 +25,7 @@ def getChosenGame(game_name, player1, player2):
         return Connect4(player1, player2)
     elif game_name.lower()=="othello":
         from Games.othello import Othello_Reversi
+        return Othello_Reversi(player1, player2)
     elif game_name.lower()=="tictactoe":
         from Games.tictactoe import tic_tac_toe as TicTacToe 
         return TicTacToe(player1, player2)
