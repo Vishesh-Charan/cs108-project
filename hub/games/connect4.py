@@ -36,12 +36,17 @@ green=pg.image.load('green sphere.png')
 red=pg.transform.scale(red,(sidex,sidey))
 yellow=pg.transform.scale(yellow,(sidex,sidey+4))
 green=pg.transform.scale(green,(sidex,sidey))
+font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class Connect4(general):
     def __init__(self,player1,player2):
         super().__init__(player1,player2)
         self.board=np.zeros((row,colomn)) 
     def draw_lines(self):
         screen.blit(BG_Image,(0,0))
+        Text= str(self.currentturnplayer()) +" Moves"
+        Turn_surface=font.render(Text,True,(255,255,255))
+        screen.blit(Turn_surface,(180,30))
+
         
             
     def draw_figures(self):

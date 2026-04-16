@@ -23,6 +23,7 @@ sidex=48
 sidey=46
 # the side of each box = 600 pixels/10
 row,colomn=10,10
+font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class tic_tac_toe(general):
     def __init__(self,player1,player2):
         super().__init__(player1,player2)
@@ -34,6 +35,10 @@ class tic_tac_toe(general):
         BG_Image= pg.image.load('TTT Board.png')    
         BG_Image=pg.transform.scale(BG_Image, (600,600))
         screen.blit(BG_Image,(0,0))
+        Text= str(self.currentturnplayer()) +" Moves"
+        Turn_surface=font.render(Text,True,(255,255,255))
+        screen.blit(Turn_surface,(100,20))
+
 
     def draw_figures(self):
         #first lets define circle and cross color then its radius, dimensions , etc....
@@ -136,6 +141,8 @@ class tic_tac_toe(general):
         """
 
         while True:
+            self.draw_lines()
+            self.draw_figures()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()

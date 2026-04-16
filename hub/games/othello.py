@@ -23,6 +23,7 @@ screen=pg.display.set_mode((width,hieght))
 pg.display.set_caption("Othello(Reversi)")
 side=100
 row,colomn=8,8
+font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class Othello_Reversi(general):
     def __init__(self,player1,player2):
         super().__init__(player1,player2)
@@ -34,6 +35,10 @@ class Othello_Reversi(general):
         BG_Image= pg.image.load('Othello board.png')    
         BG_Image=pg.transform.scale(BG_Image, (800,800))
         screen.blit(BG_Image,(0,0))
+        Text= str(self.currentturnplayer()) +" Moves"
+        Turn_surface=font.render(Text,True,(255,255,255))
+        screen.blit(Turn_surface,(180,30))
+
     def draw_figures(self):
 
         whitepiece= pg.image.load('White Othello.png')
@@ -137,6 +142,8 @@ class Othello_Reversi(general):
 
 
         while True:
+            self.draw_board()
+            self.draw_figures()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
