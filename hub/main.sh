@@ -59,5 +59,5 @@ while true; do
         break
     fi
 done
-py game.py $usn1 $usn2
+python game.py $usn1 $usn2
 
