@@ -18,12 +18,9 @@ and explanations written here.
 pg.init() 
 #initializing pygame
 clock=pg.time.Clock()
-width,hieght=700,700
-screen=pg.display.set_mode((width,hieght))
-pg.display.set_caption("Connect 4")
-bg_color=(28, 40, 51)
-screen.fill(bg_color)
-offsetx=94
+Board_x=150
+Board_y=0
+offsetx=94+ Board_x
 offsety=100
 sidex=72
 sidey=66
@@ -38,14 +35,15 @@ yellow=pg.transform.scale(yellow,(sidex,sidey+4))
 green=pg.transform.scale(green,(sidex,sidey))
 font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class Connect4(general):
-    def __init__(self,player1,player2):
+    def __init__(self,player1,player2,screen):
         super().__init__(player1,player2)
-        self.board=np.zeros((row,colomn)) 
+        self.board=np.zeros((row,colomn))
+        self.screen=screen 
     def draw_lines(self):
-        screen.blit(BG_Image,(0,0))
+        self.screen.blit(BG_Image,(Board_x,Board_y))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
-        screen.blit(Turn_surface,(180,30))
+        self.screen.blit(Turn_surface,(180+Board_x,30))
 
         
             
@@ -53,9 +51,9 @@ class Connect4(general):
         for rows in range(row):
             for col in range(colomn):
                 if self.board[rows][col] == 1:
-                    screen.blit(red,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
+                    self.screen.blit(red,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
                 elif self.board[rows][col] == 2:
-                    screen.blit(yellow,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
+                    self.screen.blit(yellow,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
 
     def ball_animation(self,row,col,player):
         #making the ball falling animation
@@ -66,9 +64,9 @@ class Connect4(general):
             self.draw_lines()
             self.draw_figures()
             if player == 1:
-                    screen.blit(red,(int(offsetx+col * sidex+3), i))
+                    self.screen.blit(red,(int(offsetx+col * sidex+3), i))
             elif player == 2:
-                    screen.blit(yellow,(int(offsetx+col * sidex+3), i))
+                    self.screen.blit(yellow,(int(offsetx+col * sidex+3), i))
             pg.display.update()
             clock.tick(60)
         
@@ -118,7 +116,7 @@ class Connect4(general):
   
     
     def run(self):
-
+        pg.display.update()
         #initializing
         self.draw_lines()
         player = 1
@@ -134,7 +132,7 @@ class Connect4(general):
             if hovered_col>=0 and hovered_col<7:
                 hover_surface = pg.Surface((sidex, row * sidey), pg.SRCALPHA)
                 hover_surface.fill((200, 200, 200, 80))
-                screen.blit(hover_surface,(offsetx + hovered_col * sidex+5, offsety+4))
+                self.screen.blit(hover_surface,(offsetx + hovered_col * sidex+5, offsety+4))
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -174,14 +172,14 @@ class Connect4(general):
             if game_over and winnermade:
                 if stat[2]==3 or stat[2]==4:
                     for points in stat[1]:
-                        screen.blit(green,(int(offsetx+points[1]*sidex+3), int(offsety+points[0]*sidey+5)))
+                        self.screen.blit(green,(int(offsetx+points[1]*sidex+3), int(offsety+points[0]*sidey+5)))
                         pg.display.update()
                         pg.time.delay(100)
                     pg.time.delay(500)
                     return winner
                 else:
                     for points in stat[1]:
-                        screen.blit(green,(int(offsetx+points[0]*sidex+3), int(offsety+points[1]*sidey+5)))
+                        self.screen.blit(green,(int(offsetx+points[0]*sidex+3), int(offsety+points[1]*sidey+5)))
                         pg.display.update()
                         pg.time.delay(100)
                     pg.time.delay(500)

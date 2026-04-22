@@ -19,13 +19,13 @@ pg.init()
 #initializing pygame
 
 width,hieght=800,800
-screen=pg.display.set_mode((width,hieght))
+screen=pg.display.set_mode((1000,hieght))
 pg.display.set_caption("Othello(Reversi)")
 side=100
 row,colomn=8,8
 font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class Othello_Reversi(general):
-    def __init__(self,player1,player2):
+    def __init__(self,player1,player2,screen):
         super().__init__(player1,player2)
         self.board=np.zeros((row,colomn)) 
         self.board[3,3],self.board[4,4]=1,1
@@ -34,10 +34,10 @@ class Othello_Reversi(general):
     def draw_board(self):
         BG_Image= pg.image.load('Othello board.png')    
         BG_Image=pg.transform.scale(BG_Image, (800,800))
-        screen.blit(BG_Image,(0,0))
+        screen.blit(BG_Image,(100,0))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
-        screen.blit(Turn_surface,(180,30))
+        screen.blit(Turn_surface,(180+100,30))
 
     def draw_figures(self):
 
@@ -50,10 +50,10 @@ class Othello_Reversi(general):
         for rows in range(row):
             for col in range(colomn):
                 if self.board[rows][col] == 1:
-                    screen.blit(whitepiece, (int(offset + col * side + side//2+7), int(offset + rows * side + side//2)))
+                    screen.blit(whitepiece, (int(offset+100 + col * side + side//2+7), int(offset + rows * side + side//2)))
 
                 elif self.board[rows][col] == 2:
-                    screen.blit(blackpiece, (int(offset + col * side + side//2+10), int(offset + rows * side + side//2)))
+                    screen.blit(blackpiece, (int(offset + 100 + col * side + side//2+10), int(offset + rows * side + side//2)))
 
 
     def valid_move_and_update(self,row,col,player):
@@ -180,7 +180,7 @@ class Othello_Reversi(general):
 
                     # check if click is inside board
                     if offset <= mouseX <= offset + 8 * tile and offset <= mouseY <= offset + 8 * tile:
-                        clicked_col = int((mouseX - offset) // tile)
+                        clicked_col = int((mouseX - offset-100) // tile)
                         clicked_row = int((mouseY - offset) // tile)
                         if(self.valid_move_and_update(clicked_row,clicked_col,player)):
                             #switch()
