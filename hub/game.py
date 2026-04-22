@@ -19,17 +19,17 @@ class general:
     def check_win(self,player):
         raise NotImplementedError 
 
-def getChosenGame(game_name, player1, player2):
+def getChosenGame(game_name, player1, player2,screen):
     if game_name.lower()=="connect4":
         from Games.connect4 import Connect4
-        return Connect4(player1, player2)
+        return Connect4(player1, player2,screen)
     elif game_name.lower()=="othello":
         from Games.othello import Othello_Reversi
-        return Othello_Reversi(player1, player2)
+        return Othello_Reversi(player1, player2,screen)
     elif game_name.lower()=="tictactoe":
         from Games.tictactoe import tic_tac_toe as TicTacToe 
-        return TicTacToe(player1, player2)
-    
+        return TicTacToe(player1, player2,screen)
+
 def showmenu(screen):
     # Setting up general things like importing images, taking up fonts and colours and positioning the elements
     font_general= pygame.font.Font("PressStart2P-Regular.ttf",44)
@@ -132,7 +132,54 @@ def showmenu(screen):
                     current_sel=(current_sel+1)%len(games)
                 elif event.key==pygame.K_RETURN:
                     return games[current_sel]
-                
+
+def startscreen(screen,game_name):
+    font= pygame.font.Font("PressStart2P-Regular.ttf",44)
+    font_large= pygame.font.Font("PressStart2P-Regular.ttf",68)
+    game_surface=font.render(game_name,True,(255,255,255))
+    p1_surface= font.render(player1,True,(255,255,255))
+    p2_surface= font.render(player2,True,(255,255,255))
+    Vs= font_large.render("Vs",True, (255,255,255))
+    BG_COLOR = (30, 30, 60)
+    screen.fill(BG_COLOR)
+    p1=pygame.image.load("p1 sprite 2.png")
+    p2=pygame.image.load("p2 sprite 2.png")
+    p1_2=pygame.image.load("p1 sprite 3.png")
+    p2_2=pygame.image.load("p2 sprite 3.png")
+    p1s=[p1,p1_2]
+    p2s=[p2,p2_2]
+    for i in range(4):
+        pygame.display.update()
+        if i<3:
+            text= str(3-i) + "...."
+            count=font.render(text,True,(255,255,255))
+            for j in range(3):
+                screen.fill(BG_COLOR)
+                screen.blit(game_surface,(300,70))
+                screen.blit(p1s[j%2],(20,180-(j%2)*50))
+                screen.blit(p2s[j%2],(680,180-(j%2)*50))
+                screen.blit(p1_surface,(20,550))
+                screen.blit(p2_surface,(680,550))
+                screen.blit(Vs,(450,330))
+                screen.blit(count,(330,620))
+                pygame.display.update()
+                pygame.time.delay(333)
+        else:
+            text= "GO!!!"
+            count=font.render(text,True,(255,255,255))
+            screen.fill(BG_COLOR)
+            screen.blit(game_surface,(300,70))
+            screen.blit(p1s[0],(20,180))
+            screen.blit(p2s[0],(680,180))
+            screen.blit(p1_surface,(20,550))
+            screen.blit(p2_surface,(680,550))
+            screen.blit(Vs,(450,330))
+            screen.blit(count,(330,620))
+            pygame.display.update()
+            pygame.time.delay(1000)
+            screen.fill(BG_COLOR)
+            pygame.display.update()
+
 def leaderboard_data(screen,winner):
     screen = pygame.display.set_mode((1000, 900))
     font= pygame.font.Font("PressStart2P-Regular.ttf",48)
@@ -356,6 +403,7 @@ def main():
         if game is None:
             continue
         else:
+            startscreen(screen,game_name)
             winner=game.run()
         if winner:
             print(f"{winner} Won, Congrats!")

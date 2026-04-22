@@ -12,8 +12,8 @@ games=$(awk -F',' '{print $4}' history.csv |sort|uniq)
 
 for g in $games; do
     if [ "$1" == "namea" ];then
-        echo "======= $(echo $g | tr '[:lower:]' '[:upper:]') ======="
-        echo "Player | Wins | Losses | W/L Ratio"
+        echo "============ $(echo $g | tr '[:lower:]' '[:upper:]') ============"
+        printf "%-20s | %-5s | %-5s | %-5s\n" "Player" "Wins" "Losses" "W/L Ratio"
         awk -F',' -v game="$g" '
         BEGIN{
             OFS=" | ";
@@ -33,13 +33,13 @@ for g in $games; do
                 } else{
                 wl[p]=win[p]/loss[p];
                 }
-                print p, win[p], loss[p], wl[p];
+                printf "%-20s | %-5d | %-6d | %-8.2f\n", p, win[p], loss[p], wl[p];
 
             }
         }' history.csv | sort -t "|" -d -k 1
     elif [ "$1" == "named" ];then
-        echo "======= $(echo $g | tr '[:lower:]' '[:upper:]') ======="
-        echo "Player | Wins | Losses | W/L Ratio"
+        echo "============ $(echo $g | tr '[:lower:]' '[:upper:]') ============"
+        printf "%-20s | %-5s | %-5s | %-5s\n" "Player" "Wins" "Losses" "W/L Ratio"
         awk -F',' -v game="$g" '
         BEGIN{
             OFS=" | ";
@@ -59,13 +59,13 @@ for g in $games; do
                 } else{
                 wl[p]=win[p]/loss[p];
                 }
-                print p, win[p], loss[p], wl[p];
+                printf "%-20s | %-5d | %-6d | %-8.2f\n", p, win[p], loss[p], wl[p];
 
             }
         }' history.csv | sort -t "|" -dr -k 1
     else
-        echo "======= $(echo $g | tr '[:lower:]' '[:upper:]') ======="
-        echo "Player | Wins | Losses | W/L Ratio"
+        echo "============ $(echo $g | tr '[:lower:]' '[:upper:]') ============"
+        printf "%-20s | %-5s | %-5s | %-5s\n" "Player" "Wins" "Losses" "W/L Ratio"
         awk -F',' -v game="$g" '
         BEGIN{
             OFS=" | ";
@@ -85,10 +85,10 @@ for g in $games; do
                 } else{
                 wl[p]=win[p]/loss[p];
                 }
-                print p, win[p], loss[p], wl[p];
+                printf "%-20s | %-5d | %-6d | %-8.2f\n", p, win[p], loss[p], wl[p];
 
             }
-        }' history.csv | sort -t "|" -nr -k $col
+        }' history.csv | sort -t "|" -nr -k "$col"
     fi
 done
 
