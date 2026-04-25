@@ -43,7 +43,7 @@ class Connect4(general):
         self.screen.blit(BG_Image,(Board_x,Board_y))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
-        self.screen.blit(Turn_surface,(180+Board_x,30))
+        self.screen.blit(Turn_surface,(220+Board_x,650))
 
         
             
@@ -54,6 +54,74 @@ class Connect4(general):
                     self.screen.blit(red,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
                 elif self.board[rows][col] == 2:
                     self.screen.blit(yellow,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
+    
+    def moveback(self,screen):
+        font = pg.font.Font("PressStart2P-Regular.ttf", 19)
+        small_font = pg.font.Font("PressStart2P-Regular.ttf", 16)
+        BG_COLOR = (30, 30, 60)
+        NORMAL_COLOR = (200, 200, 200)
+        HOVER_COLOR = (255, 255, 255)
+        OVERLAY_COLOR = (0, 0, 0, 150)
+
+        # Box dimensions
+        box_w, box_h = 500, 300
+        box_x = (1000 - box_w) // 2  
+        box_y = (700 - box_h) // 2   
+
+        line1 = "Go back to the main menu?"
+        # Buttons positioned relative to box
+        continue_button = pg.Rect(box_x + 50, box_y + 180, 170, 50)
+        quit_button = pg.Rect(box_x + 280, box_y + 180, 170, 50)
+
+        clock = pg.time.Clock()
+
+        while True:
+            mouse_pos = pg.mouse.get_pos()
+            hoveredc = continue_button.collidepoint(mouse_pos)
+            hoveredq = quit_button.collidepoint(mouse_pos)
+            if hoveredc:
+                c_color=HOVER_COLOR
+            else:
+                c_color=NORMAL_COLOR
+            if hoveredq:
+                q_color=HOVER_COLOR
+            else:
+                q_color=NORMAL_COLOR
+
+            # Draw overlay over the existing screen
+            overlay = pg.Surface((1000, 700), pg.SRCALPHA)
+            overlay.fill(OVERLAY_COLOR)
+            screen.blit(overlay, (0, 0))
+
+            # Draw the popup box
+            pg.draw.rect(screen, BG_COLOR, (box_x, box_y, box_w, box_h), border_radius=12)
+            pg.draw.rect(screen, NORMAL_COLOR, (box_x, box_y, box_w, box_h), 3, border_radius=12)
+
+            # Draw text inside box
+            text1 = font.render(line1, True, (255, 255, 255))
+            screen.blit(text1, text1.get_rect(center=(box_x + box_w // 2, box_y + 80)))
+
+            # Draw buttons
+            pg.draw.rect(screen, c_color, continue_button, 3, border_radius=8)
+            pg.draw.rect(screen, q_color, quit_button, 3, border_radius=8)
+
+            cont_text = small_font.render("Continue", True, (255, 255, 255))
+            quit_text = small_font.render("Quit", True, (255, 255, 255))
+            screen.blit(cont_text, cont_text.get_rect(center=continue_button.center))
+            screen.blit(quit_text, quit_text.get_rect(center=quit_button.center))
+
+            pg.display.flip()
+            clock.tick(60)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return 0
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    if continue_button.collidepoint(event.pos):
+                        return 1
+                    elif quit_button.collidepoint(event.pos):
+                        return 0
+                
 
     def ball_animation(self,row,col,player):
         #making the ball falling animation
@@ -118,6 +186,9 @@ class Connect4(general):
     def run(self):
         pg.display.update()
         #initializing
+        pg.mixer.init()
+        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+        pg.mixer.music.play(-1)
         self.draw_lines()
         player = 1
         game_over = False
@@ -125,9 +196,22 @@ class Connect4(general):
 
         while True:
             self.draw_lines()
+            back_text="Back to menu"
+            back_button = pg.Rect(540, 15, 300, 50)
+            mouse_position=pg.mouse.get_pos()
+            hoveredb= back_button.collidepoint(mouse_position)
+            if hoveredb:
+                pg.draw.rect(self.screen, (255, 0, 0), back_button,3)  
+                Back_surface=font.render(back_text,True,(255,0,0))
+                back_rect = Back_surface.get_rect(center=back_button.center)
+                self.screen.blit(Back_surface, back_rect)
+            else:
+                pg.draw.rect(self.screen, (255, 255, 255), back_button,3)  
+                Back_surface=font.render(back_text,True,(255,255,255))
+                back_rect = Back_surface.get_rect(center=back_button.center)
+                self.screen.blit(Back_surface, back_rect)
             self.draw_figures()
             #Adding hover
-            mouse_position=pg.mouse.get_pos()
             hovered_col = int((mouse_position[0]-offsetx) // sidex)
             if hovered_col>=0 and hovered_col<7:
                 hover_surface = pg.Surface((sidex, row * sidey), pg.SRCALPHA)
@@ -138,7 +222,17 @@ class Connect4(general):
                     pg.quit()
                     sys.exit()
                     #this part is handling the termination of the loop
-                if event.type == pg.MOUSEBUTTONDOWN and not game_over:
+                elif event.type == pg.MOUSEBUTTONDOWN and back_button.collidepoint(event.pos):
+                    pg.mixer.music.stop()
+                    if(self.moveback(self.screen)):
+                        self.draw_lines()
+                        self.draw_figures()
+                        pg.mixer.init()
+                        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+                        pg.mixer.music.play(-1)
+                    else:
+                        return 0
+                elif event.type == pg.MOUSEBUTTONDOWN and not game_over:
                     mouseX = event.pos[0]
                     mouseY = event.pos[1]
                     #storing the co ordinates of the pixel where the mouse got clicked

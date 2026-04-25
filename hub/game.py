@@ -399,13 +399,15 @@ def main():
         screen.fill((28, 40, 51))
         pygame.display.update()
         game_name=showmenu(screen)
-        game=getChosenGame(game_name,player1,player2)
+        game=getChosenGame(game_name,player1,player2,screen)
         if game is None:
             continue
         else:
             startscreen(screen,game_name)
             winner=game.run()
-        if winner:
+        if winner==0:
+            continue
+        elif winner:
             print(f"{winner} Won, Congrats!")
             if winner==player1:
                 loser=player2
