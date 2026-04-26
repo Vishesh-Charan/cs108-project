@@ -9,18 +9,17 @@ from game import general
 pg.init() 
 #initializing pygame
 
-width,hieght=600,600
-Board_x=200
-Board_y=50
+width,hieght=700,700
+Board_x=150
+Board_y=0
 #screen=pg.display.set_mode(width,hieght), i did this mistake
 #note-it takes only one input which is tuple, not two different number inputs
 #I made a variable "screen" which refers to our display of width*hieght
 pg.display.set_caption("Tic Tac Toe")
 #wrote caption
 #now lets set a background color 
-sidex=48
-sidey=46
-# the side of each box = 600 pixels/10
+sidex=55
+sidey=54
 row,colomn=10,10
 font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class tic_tac_toe(general):
@@ -33,7 +32,7 @@ class tic_tac_toe(general):
     def draw_lines(self):
         #Drawing the background board
         BG_Image= pg.image.load('TTT Board.png')    
-        BG_Image=pg.transform.scale(BG_Image, (600,600))
+        BG_Image=pg.transform.scale(BG_Image, (700,700))
         self.screen.blit(BG_Image,(Board_x,Board_y))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
@@ -50,10 +49,10 @@ class tic_tac_toe(general):
             for col in range(colomn):
                 if self.board[rows][col] == 1:
                     #Insert O-
-                    self.screen.blit(o,(int(61+Board_x+col * sidex + 5), int(76+Board_y+rows * sidey + 5)))
+                    self.screen.blit(o,(int(72+Board_x+col * sidex + 10), int(89+Board_y+rows * sidey + 5)))
                 elif self.board[rows][col] == 2:
                     #cross 
-                    self.screen.blit(x,(int(61+Board_x+col * sidex + 5), int(76+Board_y+rows * sidey + 5)))
+                    self.screen.blit(x,(int(72+Board_x+col * sidex + 10), int(89+Board_y+rows * sidey + 5)))
     
     def moveback(self,screen):
         font = pg.font.Font("PressStart2P-Regular.ttf", 19)
@@ -118,6 +117,8 @@ class tic_tac_toe(general):
                     return 0
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if continue_button.collidepoint(event.pos):
+                        screen.fill(BG_COLOR)
+                        pg.display.update()
                         return 1
                     elif quit_button.collidepoint(event.pos):
                         return 0
@@ -211,7 +212,7 @@ class tic_tac_toe(general):
         while True:
             self.draw_lines()
             back_text="Back to menu"
-            back_button = pg.Rect(570, 15, 300, 50)
+            back_button = pg.Rect(570, 10, 300, 50)
             mouse_pos = pg.mouse.get_pos()
             hoveredb= back_button.collidepoint(mouse_pos)
             if hoveredb:
@@ -244,8 +245,8 @@ class tic_tac_toe(general):
                     mouseX = event.pos[0]
                     mouseY = event.pos[1]
                     #storing the co ordinates of the pixel where the mouse got clicked
-                    clicked_row = int((mouseY-76-Board_y) // sidey)
-                    clicked_col = int((mouseX-61-Board_x) // sidex)
+                    clicked_row = int((mouseY-89-Board_y) // sidey)
+                    clicked_col = int((mouseX-72-Board_x) // sidex)
                     #found the corresponding row and colomn in 10*10 board
 
                     if self.available_square(clicked_row, clicked_col):
@@ -257,13 +258,13 @@ class tic_tac_toe(general):
                         #Mark the tiles with a line to indicate Victory 
                         if stat[0]:
                             if stat[2]==1:
-                                pg.draw.line(self.screen,(128,128,128),(61+Board_x+stat[1][1]*sidex+sidex//2,76+Board_y+(stat[1][0]+stat[1][2])*sidey+sidey//2),(61+Board_x+(stat[1][1]+4)*sidex+sidex//2,76+Board_y+(stat[1][0]+stat[1][2])*sidey+sidey//2),width=3)
+                                pg.draw.line(self.screen,(128,128,128),(72+Board_x+stat[1][1]*sidex+sidex//2,89+Board_y+(stat[1][0]+stat[1][2])*sidey+sidey//2),(72+Board_x+(stat[1][1]+4)*sidex+sidex//2,89+Board_y+(stat[1][0]+stat[1][2])*sidey+sidey//2),width=3)
                             elif stat[2]==2:
-                                pg.draw.line(self.screen,(128,128,128),(61+Board_x+(stat[1][1]+stat[1][2])*sidex+sidex//2,76+Board_y+stat[1][0]*sidey+sidey//2),(61+Board_x+(stat[1][1]+stat[1][2])*sidex+sidex//2,76+Board_y+(stat[1][0]+4)*sidey+sidey//2),width=3)
+                                pg.draw.line(self.screen,(128,128,128),(72+Board_x+(stat[1][1]+stat[1][2])*sidex+sidex//2,89+Board_y+stat[1][0]*sidey+sidey//2),(72+Board_x+(stat[1][1]+stat[1][2])*sidex+sidex//2,89+Board_y+(stat[1][0]+4)*sidey+sidey//2),width=3)
                             elif stat[2]==3:
-                                pg.draw.line(self.screen,(128,128,128),(61+Board_x+stat[1][1]*sidex+sidex//2,76+Board_y+stat[1][0]*sidey+sidey//2),(61+Board_x+(stat[1][1]+4)*sidex+sidex//2,76+Board_y+(stat[1][0]+4)*sidey+sidey//2),width=3)
+                                pg.draw.line(self.screen,(128,128,128),(72+Board_x+stat[1][1]*sidex+sidex//2,89+Board_y+stat[1][0]*sidey+sidey//2),(72+Board_x+(stat[1][1]+4)*sidex+sidex//2,89+Board_y+(stat[1][0]+4)*sidey+sidey//2),width=3)
                             elif stat[2]==4:
-                                pg.draw.line(self.screen,(128,128,128),(61+Board_x+stat[1][1]*sidex+sidex//2,76+Board_y+(stat[1][0]+4)*sidey+sidey//2),(61+Board_x+(stat[1][1]+4)*sidex+sidex//2,76+Board_y+stat[1][0]*sidey+sidey//2),width=3)
+                                pg.draw.line(self.screen,(128,128,128),(72+Board_x+stat[1][1]*sidex+sidex//2,89+Board_y+(stat[1][0]+4)*sidey+sidey//2),(72+Board_x+(stat[1][1]+4)*sidex+sidex//2,89+Board_y+stat[1][0]*sidey+sidey//2),width=3)
                             game_over = True
                             print(f"Player {player} wins!")
                             winner=self.currentturnplayer()

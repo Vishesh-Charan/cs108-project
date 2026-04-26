@@ -34,6 +34,7 @@ red=pg.transform.scale(red,(sidex,sidey))
 yellow=pg.transform.scale(yellow,(sidex,sidey+4))
 green=pg.transform.scale(green,(sidex,sidey))
 font= pg.font.Font("PressStart2P-Regular.ttf",24)
+pg.display.set_caption("Connect 4")
 class Connect4(general):
     def __init__(self,player1,player2,screen):
         super().__init__(player1,player2)
@@ -118,6 +119,8 @@ class Connect4(general):
                     return 0
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if continue_button.collidepoint(event.pos):
+                        screen.fill(BG_COLOR)
+                        pg.display.update()
                         return 1
                     elif quit_button.collidepoint(event.pos):
                         return 0
@@ -240,28 +243,29 @@ class Connect4(general):
                     clicked_col = int((mouseX-offsetx) // sidex)
                    
                     #events after the move is made(mouse click)
-                    if (self.max_available_square(clicked_col)>=0):
-                        self.ball_animation(self.max_available_square(clicked_col),clicked_col,player)
-                        self.mark_square(self.max_available_square(clicked_col), clicked_col, player)
-                        self.draw_figures()
-                        pg.display.update()
-                        pg.time.delay(100)
-                        stat=self.check_win(player)
-                        if stat[0]:
-                            game_over = True
-                            winnermade=True
-                            print(f"Player {player} wins!")
-                            winner=self.currentturnplayer()
-                            break
-                        elif self.is_board_full():
-                            game_over = True
-                            winnermade=False
-                            print("It's a draw!")
-                            return None
-                        #switch()
-                        #player=player%2+1
-                        self.changeturn()
-                        player=self.current_turn
+                    if clicked_col>=0 and clicked_col<7:
+                        if (self.max_available_square(clicked_col)>=0):
+                            self.ball_animation(self.max_available_square(clicked_col),clicked_col,player)
+                            self.mark_square(self.max_available_square(clicked_col), clicked_col, player)
+                            self.draw_figures()
+                            pg.display.update()
+                            pg.time.delay(100)
+                            stat=self.check_win(player)
+                            if stat[0]:
+                                game_over = True
+                                winnermade=True
+                                print(f"Player {player} wins!")
+                                winner=self.currentturnplayer()
+                                break
+                            elif self.is_board_full():
+                                game_over = True
+                                winnermade=False
+                                print("It's a draw!")
+                                return None
+                            #switch()
+                            #player=player%2+1
+                            self.changeturn()
+                            player=self.current_turn
                         #this whole part handles the main gameplay using our functions, etc
             if game_over and winnermade:
                 if stat[2]==3 or stat[2]==4:

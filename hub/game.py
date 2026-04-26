@@ -134,11 +134,12 @@ def showmenu(screen):
                     return games[current_sel]
 
 def startscreen(screen,game_name):
+    font_small= pygame.font.Font("PressStart2P-Regular.ttf",28)
     font= pygame.font.Font("PressStart2P-Regular.ttf",44)
     font_large= pygame.font.Font("PressStart2P-Regular.ttf",68)
     game_surface=font.render(game_name,True,(255,255,255))
-    p1_surface= font.render(player1,True,(255,255,255))
-    p2_surface= font.render(player2,True,(255,255,255))
+    p1_surface= font_small.render(player1,True,(255,255,255))
+    p2_surface= font_small.render(player2,True,(255,255,255))
     Vs= font_large.render("Vs",True, (255,255,255))
     BG_COLOR = (30, 30, 60)
     screen.fill(BG_COLOR)
@@ -158,8 +159,8 @@ def startscreen(screen,game_name):
                 screen.blit(game_surface,(300,70))
                 screen.blit(p1s[j%2],(20,180-(j%2)*50))
                 screen.blit(p2s[j%2],(680,180-(j%2)*50))
-                screen.blit(p1_surface,(20,550))
-                screen.blit(p2_surface,(680,550))
+                screen.blit(p1_surface,p1_surface.get_rect(center=(160,570)))
+                screen.blit(p2_surface,p2_surface.get_rect(center=(840,570)))
                 screen.blit(Vs,(450,330))
                 screen.blit(count,(330,620))
                 pygame.display.update()
@@ -171,8 +172,8 @@ def startscreen(screen,game_name):
             screen.blit(game_surface,(300,70))
             screen.blit(p1s[0],(20,180))
             screen.blit(p2s[0],(680,180))
-            screen.blit(p1_surface,(20,550))
-            screen.blit(p2_surface,(680,550))
+            screen.blit(p1_surface,p1_surface.get_rect(center=(160,570)))
+            screen.blit(p2_surface,p2_surface.get_rect(center=(840,570)))
             screen.blit(Vs,(450,330))
             screen.blit(count,(330,620))
             pygame.display.update()
@@ -306,6 +307,7 @@ def leaderboard_data(screen,winner):
 
 def postgame(screen,winner):
     screen = pygame.display.set_mode((1000, 700))
+    pygame.display.set_caption("Mini Game Hub")
     font= pygame.font.Font("PressStart2P-Regular.ttf",24)
     BG_COLOR = (30, 30, 60)          
     NORMAL_COLOR = (200, 200, 200)   
@@ -388,11 +390,10 @@ def UpdateHistory(winner,loser,game_name):
     with open("history.csv", "a") as f:
         date = datetime.now().strftime("%Y-%m-%d")
         f.write(f"\n{winner},{loser},{date},{game_name}")
-
 def main():
     player1=sys.argv[1]
     player2=sys.argv[2]
-
+    global screen
     while True:
         screen = pygame.display.set_mode((1000, 700))
         pygame.display.set_caption("Mini Game Hub")

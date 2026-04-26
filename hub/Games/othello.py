@@ -19,10 +19,9 @@ pg.init()
 #initializing pygame
 
 width,hieght=800,800
-screen=pg.display.set_mode((1000,hieght))
-pg.display.set_caption("Othello(Reversi)")
 side=100
 row,colomn=8,8
+pg.display.set_caption("Othello(Reversi)")
 font= pg.font.Font("PressStart2P-Regular.ttf",24)
 class Othello_Reversi(general):
     def __init__(self,player1,player2,screen):
@@ -30,14 +29,15 @@ class Othello_Reversi(general):
         self.board=np.zeros((row,colomn)) 
         self.board[3,3],self.board[4,4]=1,1
         self.board[3,4],self.board[4,3]=2,2
-
+        self.screen=screen
+        self.screen=pg.display.set_mode((1000,800))
     def draw_board(self):
         BG_Image= pg.image.load('Othello board.png')    
         BG_Image=pg.transform.scale(BG_Image, (800,800))
-        screen.blit(BG_Image,(100,0))
+        self.screen.blit(BG_Image,(100,0))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
-        screen.blit(Turn_surface,(180+100,30))
+        self.screen.blit(Turn_surface,(180+100,30))
 
     def draw_figures(self):
 
@@ -50,10 +50,10 @@ class Othello_Reversi(general):
         for rows in range(row):
             for col in range(colomn):
                 if self.board[rows][col] == 1:
-                    screen.blit(whitepiece, (int(offset+100 + col * side + side//2+7), int(offset + rows * side + side//2)))
+                    self.screen.blit(whitepiece, (int(offset+100 + col * side + side//2+7), int(offset + rows * side + side//2)))
 
                 elif self.board[rows][col] == 2:
-                    screen.blit(blackpiece, (int(offset + 100 + col * side + side//2+10), int(offset + rows * side + side//2)))
+                    self.screen.blit(blackpiece, (int(offset + 100 + col * side + side//2+10), int(offset + rows * side + side//2)))
 
     def moveback(self,screen):
         font = pg.font.Font("PressStart2P-Regular.ttf", 19)
@@ -88,7 +88,7 @@ class Othello_Reversi(general):
             else:
                 q_color=NORMAL_COLOR
 
-            # Draw semi-transparent overlay over the existing screen
+            # Draw overlay over the existing screen
             overlay = pg.Surface((1000, 700), pg.SRCALPHA)
             overlay.fill(OVERLAY_COLOR)
             screen.blit(overlay, (0, 0))
@@ -118,6 +118,8 @@ class Othello_Reversi(general):
                     return 0
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if continue_button.collidepoint(event.pos):
+                        screen.fill(BG_COLOR)
+                        pg.display.update()
                         return 1
                     elif quit_button.collidepoint(event.pos):
                         return 0
@@ -214,15 +216,15 @@ class Othello_Reversi(general):
             mouse_pos = pg.mouse.get_pos()
             hoveredb= back_button.collidepoint(mouse_pos)
             if hoveredb:
-                pg.draw.rect(screen, (255, 0, 0), back_button,3)  
+                pg.draw.rect(self.screen, (255, 0, 0), back_button,3)  
                 Back_surface=font.render(back_text,True,(255,0,0))
                 back_rect = Back_surface.get_rect(center=back_button.center)
-                screen.blit(Back_surface, back_rect)
+                self.screen.blit(Back_surface, back_rect)
             else:
-                pg.draw.rect(screen, (255, 255, 255), back_button,3)  
+                pg.draw.rect(self.screen, (255, 255, 255), back_button,3)  
                 Back_surface=font.render(back_text,True,(255,255,255))
                 back_rect = Back_surface.get_rect(center=back_button.center)
-                screen.blit(Back_surface, back_rect)
+                self.screen.blit(Back_surface, back_rect)
             self.draw_figures()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -231,7 +233,7 @@ class Othello_Reversi(general):
                     #this part is handling the termination of the loop
                 elif event.type == pg.MOUSEBUTTONDOWN and back_button.collidepoint(event.pos):
                     pg.mixer.music.stop()
-                    if(self.moveback(screen)):
+                    if(self.moveback(self.screen)):
                         self.draw_board()
                         self.draw_figures()
                         pg.mixer.init()
