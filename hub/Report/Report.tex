@@ -1,0 +1,126 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Report}
+\author{Prajwal and Vishesh}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+\section{External Libraries Used}
+\begin{itemize}
+    \item pygame -ce
+    \item numpy
+    \item matplotlib
+    \item sys
+    \item os
+    \item pathlib
+    \item time
+    \item datetime
+    \item subprocess
+\end{itemize}
+
+\section{Features}
+
+There are various Features we added to make the gameplay more interesting and engaging, such as-
+
+\begin{itemize}
+    
+
+\item user authentication system using SHA
+\item multiplayer(2 player) games
+\item shows history of the players wins and losses
+\item uses graphs, etc to show data
+\item display of characters in menu with thier player names written below them
+\item background music in the game
+\item falling animation of the circle in Connect Four
+\item sound effects for various actions such as clicking, etc
+\item background images which makes it look more attractive
+\item extra animation before start of each game
+
+\end{itemize}
+\clearpage
+
+\section{Code Logic}
+
+\subsection{Generic Class}
+here, the code written is the parent code which is inherited by the three games, it has some functions and variables defined,such as-\\
+
+Variables-\\
+player1 and player2 stored in players array, current turn, board\\
+
+Functions- \\
+check win, current turn player, change turn\\
+
+all these are working as thier name suggests, easy to understand\\
+\\
+There are also functions about Updating History, Postgame update in the graphs using history.csv as data and pregame countdown screen animations using loops and loading multiple images.\\
+Generally all games have similar logic- run in loop, each time taking events and executing, updating the board array, for this calling some general functions like update board, change turn, current turn player, etc.
+Hence, for each game, only unique logics are explained below
+\subsection{Tic Tac Toe}
+for check win, we first check the rows, then colomns, then diagonal and anti diagonals
+for this i made a set of all 5*5 submatrices, then checked these conditions for each matrice
+\subsection{Connect Four}
+same logic as tic tac toe, just the difference is here we can add new piece only at lowest available space in colomn
+
+%write about the logic of adding falling animation
+\subsection{Othello}
+a very interesting logic is used here to know if the clicked cell is valid or not. 
+i made a list of 8 vectors in the 8 directions( the north south east west and the in between 45 degrees)
+
+then at the clicked position, for each direction, i moved in that direction from the clicked position one by one in that direction checking.
+if its true for all directions- found a piece of same color with the previous step color bieng opposite color
+then its valid
+
+the check win is called when no valid move is left, which simply counts the nmber of pieces of the players and returns who won
+
+
+\subsection{Authentication System}
+%Vishesh
+The main.sh is the way to authentication in this project.The script handles login or registrations of players before launching the game. For each player, it reads a username and password, hashes the password with SHA-256, and checks it against users.tsv. New users get prompted to register with a password of at least 7 characters, returning users just get verified, and wrong passwords loop back to retry. Once both players are authenticated, their usernames are passed straight to game.py.
+\subsection{Leaderboard}
+%Vishesh
+The Leaderboard.sh Code uses awk command to read history.csv.\\ The awk command uses associative array to count about wins losses and win/loss ratio (equal to wins of p if losses is 0). Using formatted printing the table is printed for all games using a loop.\\  Another task is to print according to different metrics. For this we pass the metrics as an argument for the bash script. According to that argument an appropriate piped sort command does the sorting for the leaderboard table.\\
+Later the Leaderboard data funcion uses the history.csv and leaderboard to make a bar graph and pie chart using MatPlotLib.
+
+\clearpage
+
+\section{Hurdles Faced and how we Overcame them}
+\subsection{axis}
+it was very difficult for us to understand the concept of axis, we tried a lot of things - reading documents, watched videos but still it wasnt clear visually.\\
+
+Solution-i came up with a concept/theory which was working all the time.
+it is that for a vector of dimension=n, axis=k represent a set of the groups. (a group is the set of of those elements who have all indices identical except the kth indice.)
+
+\subsection{Othello's logic}
+it was too confusing that how can i make othello without using for loops , also it was difficult to check a valid move ...
+\\
+Solution- it was later announced that except in check win function, we can use for loops, also i came up with an idea of the 8 direction vectors checking.
+
+\subsection{diagonal check win}
+since tic tac toe was 10*10, to check win the diagonals, it was so difficult to check the non-main diagonals without using for loop.
+\\
+Solution-i got an idea that instead i can just check the 5*5 squares because here i wont have to check non main diagonals in 5*5, hence i made a set of all 5*5 squares and simplified it.
+
+%you can add your hurdles...
+\clearpage
+\section{What would we do with 10 more hours}
+\subsection{Add new games}
+With 10 more hours, we could add one more board game like checkers, chess,e.t.c.
+there are various such game ideas available on 2 players, a mobile game
+\subsection{Make better UI}
+We could make a better UI like better sound effects, background picture, background music etc.
+add more animations, try to increase smoothness in animations
+\subsection{Optimise}
+We could optimise our existing code so that it could run faster, use lesser memory
+\subsection{Add settings}
+We could add settings option in menu, in which user can control various things like volume, e.t.c.
+\clearpage
+
+%add bibilography and citations
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
