@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx} % Required for inserting images
+\graphicspath{{pdf_images/}}
 \usepackage{tikz}  % Required for drawing the process flow diagram
 \usetikzlibrary{positioning} %to position the images
 \usepackage{url} % Required for formatting URLs in bibilography
@@ -116,17 +117,17 @@ There are various Features we added to make the gameplay more interesting and en
 \begin{itemize}
     
 
-\item user authentication system using SHA-256 hashing and tsv file storage
-\item multiplayer(2 player) games
-\item shows history of the players wins and losses
-\item uses graphs, etc to show data
-\item display of characters in menu with thier player names written below them
-\item background music in the game
-\item falling animation of the circle in Connect Four
-\item sound effects for various actions such as clicking, etc
-\item background images which makes it look more attractive
-\item extra animation before start of each game
-\item added fireworks animation at the end of the game screen -\\ It is a loop of frames which initiate randomly and show the animation. Based on random generation and frzme shifting.
+\item User authentication system using SHA-256 hashing and tsv file storage
+\item 2 player games
+\item Shows history of the players wins and losses
+\item Uses graphs, etc to show data
+\item Display of characters in menu with thier player names written below them
+\item Background music in the game
+\item Falling animation of the circle in Connect Four
+\item Sound effects for various actions such as clicking, etc
+\item Background images which makes it look more attractive
+\item Extra animation before start of each game
+\item Added fireworks animation at the end of the game screen -\\ It is a loop of frames which initiate randomly and show the animation. Based on random generation and frame shifting.
 
 \end{itemize}
 \clearpage
@@ -134,7 +135,7 @@ There are various Features we added to make the gameplay more interesting and en
 \section{Code Logic}
 
 \subsection{Generic Class}
-here, the code written is the parent code which is inherited by the three games, it has some functions and variables defined,such as-\\
+Here, the code written is the parent code which is inherited by the three games, it has some functions and variables defined,such as-\\
 
 Variables-\\
 player1 and player2 stored in players array, current turn, board\\
@@ -142,34 +143,41 @@ player1 and player2 stored in players array, current turn, board\\
 Functions- \\
 check win, current turn player, change turn\\
 
-all these are working as thier name suggests, easy to understand\\
+All these are working as their name suggests, easy to understand\\
 \\
 There are also functions about Updating History, Postgame update in the graphs using history.csv as data and pregame countdown screen animations using loops and loading multiple images.\\
 Generally all games have similar logic- run in loop, each time taking events and executing, updating the board array, for this calling some general functions like update board, change turn, current turn player, etc.
-Hence, for each game, only unique logics are explained below
+The \texttt{draw\_board} in each game class prints the board image on which the game will be played, this is done by using the base class's current turn function.
+There is also a back to menu button which if selected quit it will exited the game class loop and return 0 to \texttt{game.py}. Which in turn simply continues its main loop and shows back the menu with no update history or postgame or anything.
+There is a turn indicating text which updates on each turn. And if the game is completed, the winner (or None in case of draw) is returned to the game.py 
+Now , for each game, only unique logics are explained below
 \subsection{Tic Tac Toe}
 It has a board of size 10*10. the winning criteria is to make a consecutive straight line of atleast 5 same pieces(X or O).\\
-for check win, we first check the rows, then colomns, then diagonal and anti diagonals
-for this i made a set of all 5*5 submatrices, then checked these conditions for each matrice.\\
-some general functions used are- draw line/circle, update board, etc 
-which does what the name suggest, for drawing, inbuilt functions of pygame are used.\\
+for check win, we first check the rows, then colomns, then diagonal and anti diagonals.\\
+for this, especially diagonals i made a set of all 5*5 submatrices in the board using \texttt{np\.lib\.stride\_tricks\.sliding\_window\_view}, then checked these conditions for each matrix.\\
+some general functions used are- draw line/circle, update board, etc which track the click activity in the game's main execution loop and according to the turn draws the figure there.\\
+In case of a win, we draw a line as we generally see in tic-tac-toe.
+For this I changed the \texttt{check\_win} function a bit- Instead of just a bool indicating true or false, I take the starting point from which I will start the line and also an indicator for the type of win- row, column, diagonal or anti-diagonal. Later in the main loop, I get the returned values and I draw the lines accordingly.\\
+For drawing, inbuilt functions of pygame are used.\\
 \subsection{Connect Four}
 Board size 7*7. the winning criteria is to make 4 same pieces in a straight line.\\
 same logic as tic tac toe, just the difference is here we can add new piece only at lowest available space in colomn.\\
-
+So to check availibility of any column I just check whether the top row element in that column is occupied or not.\\
+Check win logic is pretty similar to tic tac toe, just the submatrices are 4x4. 
+I have added an hover effect on the column by using the get mouse point function of pygame.
 It has a special falling piece animation which is done by running a loop in which various frames are rendered with the piece's position changing(downwards). finally it stops at its corresponding final position.\\
 
 
 %write about the logic of adding falling animation
 \subsection{Othello}
-a very interesting logic is used here to know if the clicked cell is valid or not. 
-i made a list of 8 vectors in the 8 directions( the north south east west and the in between 45 degrees)
+A very interesting logic is used here to know if the clicked cell is valid or not. 
+i made a list of 8 vectors in the 8 directions( the north south east west and the in between 45 degrees)\\
 
-then at the clicked position, for each direction, i moved in that direction from the clicked position one by one in that direction checking.
-if its true for all directions- found a piece of same color with the previous step color bieng opposite color
-then its valid
-
-the check win is called when no valid move is left, which simply counts the nmber of pieces of the players and returns who won
+Then at the clicked position, for each direction, i moved in that direction from the clicked position one by one in that direction checking.
+if its true for all directions- found a piece of same color with the previous step color being opposite color
+then its valid.\\
+In this process(for a valid move), all the opposite colored pieces are at last changed to the color of the player, by storing them in a list and then iterating on them.\\
+The check win is called when no valid move is left, which simply counts the number of pieces of the players and returns who won.\\
 
 
 \subsection{Authentication System}
@@ -178,8 +186,8 @@ The main.sh is the way to authentication in this project.The script handles logi
  you can also manage your account- you can change your password or delete your user as well. Its done using if else statements and sed commands for substitution and deletion
 \subsection{Leaderboard}
 %Vishesh
-The Leaderboard.sh Code uses awk command to read history.csv.\\ The awk command uses associative array to count about wins losses and win/loss ratio (equal to wins of p if losses is 0). Using formatted printing the table is printed for all games using a loop.\\  Another task is to print according to different metrics. For this we pass the metrics as an argument for the bash script. According to that argument an appropriate piped sort command does the sorting for the leaderboard table.\\
-Later the Leaderboard data funcion uses the history.csv and leaderboard to make a bar graph and pie chart using MatPlotLib.
+The Leaderboard.sh, Code uses awk command to read history.csv.\\ The awk command uses associative array to count about wins losses and win/loss ratio (equal to wins of p if losses is 0). Using formatted printing the table is printed for all games using a loop.\\  Another task is to print according to different metrics. For this we pass the metrics as an argument for the bash script. According to that argument an appropriate piped sort command does the sorting for the leaderboard table.\\
+Later the Leaderboard data funcion uses the history.csv and leaderboard to make a bar graph and pie chart using MatPlotLib. To display the images of the graphs the images are saved and then are displayed using \texttt{pygame.blit()}.
 
 %\clearpage
 
@@ -232,26 +240,26 @@ We could add settings option in menu, in which user can control various things l
 At last, here are some gameplay visuals...
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (1).jpeg}
+    \includegraphics[width=0.4\textwidth]{img1.jpeg}
     \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (2).jpeg}\\
+    \includegraphics[width=0.4\textwidth]{img2.jpeg}\\
     \vspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (3).jpeg}
+    \includegraphics[width=0.4\textwidth]{img3.jpeg}
     \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00.jpeg}\\
+    \includegraphics[width=0.4\textwidth]{img4.jpeg}\\
     \vspace{1cm}
     \caption{Gameplay visuals -1}
 \end{figure}
 %ek page pe 8 images aa hi nahi rahe
 \begin{figure}[h]
     \centering
-     \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01 (1).jpeg}
+     \includegraphics[width=0.4\textwidth]{img5.jpeg}
     \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.02.jpeg}\\
+    \includegraphics[width=0.4\textwidth]{img6.jpeg}\\
     \vspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01 (2).jpeg}
+    \includegraphics[width=0.4\textwidth]{img7.jpeg}
     \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01.jpeg}
+    \includegraphics[width=0.4\textwidth]{img8.jpeg}
     \caption{Gameplay visuals -2}
 \end{figure}
 \clearpage
