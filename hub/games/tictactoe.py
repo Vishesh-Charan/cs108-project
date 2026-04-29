@@ -21,7 +21,7 @@ pg.display.set_caption("Tic Tac Toe")
 sidex=55
 sidey=54
 row,colomn=10,10
-font= pg.font.Font("PressStart2P-Regular.ttf",24)
+font= pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",24)
 class tic_tac_toe(general):
     def __init__(self,player1,player2,screen):
         super().__init__(player1,player2)
@@ -31,7 +31,7 @@ class tic_tac_toe(general):
         #initialized the board
     def draw_lines(self):
         #Drawing the background board
-        BG_Image= pg.image.load('TTT Board.png')    
+        BG_Image= pg.image.load('Images/TTT Board.png')    
         BG_Image=pg.transform.scale(BG_Image, (700,700))
         self.screen.blit(BG_Image,(Board_x,Board_y))
         Text= str(self.currentturnplayer()) +" Moves"
@@ -41,8 +41,8 @@ class tic_tac_toe(general):
 
     def draw_figures(self):
         #first lets define circle and cross color then its radius, dimensions , etc....
-        x=pg.image.load('X.png')
-        o=pg.image.load('O.png')
+        x=pg.image.load('Images/X.png')
+        o=pg.image.load('Images/O.png')
         x=pg.transform.scale(x,(sidex-10,sidey-10))
         o=pg.transform.scale(o,(sidex-10,sidey-10))
         for rows in range(row):
@@ -55,8 +55,8 @@ class tic_tac_toe(general):
                     self.screen.blit(x,(int(72+Board_x+col * sidex + 10), int(89+Board_y+rows * sidey + 5)))
     
     def moveback(self,screen):
-        font = pg.font.Font("PressStart2P-Regular.ttf", 19)
-        small_font = pg.font.Font("PressStart2P-Regular.ttf", 16)
+        font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 19)
+        small_font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 16)
         BG_COLOR = (30, 30, 60)
         NORMAL_COLOR = (200, 200, 200)
         HOVER_COLOR = (255, 255, 255)
@@ -197,7 +197,7 @@ class tic_tac_toe(general):
     def run(self):
         #background music
         pg.mixer.init()
-        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
         pg.mixer.music.play(-1)
         #initializing
         self.draw_lines()
@@ -237,7 +237,7 @@ class tic_tac_toe(general):
                         self.draw_lines()
                         self.draw_figures()
                         pg.mixer.init()
-                        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+                        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
                         pg.mixer.music.play(-1)
                     else:
                         return 0

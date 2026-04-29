@@ -22,7 +22,7 @@ width,hieght=800,800
 side=100
 row,colomn=8,8
 pg.display.set_caption("Othello(Reversi)")
-font= pg.font.Font("PressStart2P-Regular.ttf",24)
+font= pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",24)
 class Othello_Reversi(general):
     def __init__(self,player1,player2,screen):
         super().__init__(player1,player2)
@@ -32,17 +32,17 @@ class Othello_Reversi(general):
         self.screen=screen
         self.screen=pg.display.set_mode((1000,800))
     def draw_board(self):
-        BG_Image= pg.image.load('Othello board.png')    
+        BG_Image= pg.image.load('Images/Othello board.png')    
         BG_Image=pg.transform.scale(BG_Image, (800,800))
         self.screen.blit(BG_Image,(100,0))
         Text= str(self.currentturnplayer()) +" Moves"
         Turn_surface=font.render(Text,True,(255,255,255))
-        self.screen.blit(Turn_surface,(180+100,30))
+        self.screen.blit(Turn_surface,(180,30))
 
     def draw_figures(self):
 
-        whitepiece= pg.image.load('White Othello.png')
-        blackpiece=pg.image.load('Black othello.png')
+        whitepiece= pg.image.load('Images/White Othello.png')
+        blackpiece=pg.image.load('Images/Black othello.png')
         circle_color1,circle_color2=(241, 196, 15),(1,1,1) 
         radius,side,offset=25,72,55
         whitepiece=pg.transform.scale(whitepiece,(3*radius+15,3*radius+25))
@@ -56,8 +56,8 @@ class Othello_Reversi(general):
                     self.screen.blit(blackpiece, (int(offset + 100 + col * side + side//2+10), int(offset + rows * side + side//2)))
 
     def moveback(self,screen):
-        font = pg.font.Font("PressStart2P-Regular.ttf", 19)
-        small_font = pg.font.Font("PressStart2P-Regular.ttf", 16)
+        font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 19)
+        small_font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 16)
         BG_COLOR = (30, 30, 60)
         NORMAL_COLOR = (200, 200, 200)
         HOVER_COLOR = (255, 255, 255)
@@ -201,7 +201,7 @@ class Othello_Reversi(general):
     def run(self):
         #background music
         pg.mixer.init()
-        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
         pg.mixer.music.play(-1)
         #initializing
         self.draw_board()
@@ -237,7 +237,7 @@ class Othello_Reversi(general):
                         self.draw_board()
                         self.draw_figures()
                         pg.mixer.init()
-                        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+                        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
                         pg.mixer.music.play(-1)
                     else:
                         return 0

@@ -20,6 +20,7 @@ class general:
         raise NotImplementedError 
 
 def getChosenGame(game_name, player1, player2,screen):
+    #Getting the game class according to the name of the game, and returning the instance of that game, which will be used to run the game,with the screen and player names passed as well.
     if game_name.lower()=="connect4":
         from Games.connect4 import Connect4
         return Connect4(player1, player2,screen)
@@ -32,13 +33,13 @@ def getChosenGame(game_name, player1, player2,screen):
 
 def showmenu(screen):
     # Setting up general things like importing images, taking up fonts and colours and positioning the elements
-    font_general= pygame.font.Font("PressStart2P-Regular.ttf",44)
-    font_games= pygame.font.Font("PressStart2P-Regular.ttf",28)
-    font_player= pygame.font.Font("PressStart2P-Regular.ttf",12)
+    font_general= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",44)
+    font_games= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",28)
+    font_player= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",12)
     games = ["Connect4", "Othello", "TicTacToe"]
-    game_images=["Connect_4.png", "othello.png", "tic_tac_toe.png"]
+    game_images=["Images/Connect_4.png", "Images/othello.png", "Images/tic_tac_toe.png"]
     current_sel=0    
-    BG_Image= pygame.image.load('Board.png')    
+    BG_Image= pygame.image.load('Images/Board.png')    
     BG_Image=pygame.transform.scale(BG_Image, (1000,700))
     NORMAL_COLOR = (200, 200, 200)   
     SELECT_COLOR = (255, 255, 255)   
@@ -51,12 +52,12 @@ def showmenu(screen):
     bar_y = 30
     heading_rect = pygame.Rect(bar_x, bar_y, bar_width, bar_height)
 
-    trophy_img = pygame.image.load("game-trophy.png")
+    trophy_img = pygame.image.load("Images/game-trophy.png")
     trophy_size = 50
     trophy_img = pygame.transform.scale(trophy_img, (trophy_size, trophy_size))
 
-    player1_img = pygame.image.load("sprite 1.png")
-    player2_img = pygame.image.load("sprite 2.png")
+    player1_img = pygame.image.load("Images/sprite 1.png")
+    player2_img = pygame.image.load("Images/sprite 2.png")
     sprite_size = 180
     player1_img = pygame.transform.scale(player1_img, (sprite_size, sprite_size))   
     player2_img = pygame.transform.scale(player2_img, (sprite_size+100, sprite_size))
@@ -113,6 +114,7 @@ def showmenu(screen):
             game_image=pygame.image.load(game_images[i])
             game_image=pygame.transform.scale(game_image, (100,80))
             screen.blit(game_image, (x-150,y-20))
+            #Highlighting the selected game and changing the text color of the selected game
             if i==current_sel:
                  pygame.draw.rect(screen, HIGHLIGHT, (x - 20, y - 10, 260, 60), border_radius=10)
                  color=SELECT_COLOR
@@ -134,19 +136,20 @@ def showmenu(screen):
                     return games[current_sel]
 
 def startscreen(screen,game_name):
-    font_small= pygame.font.Font("PressStart2P-Regular.ttf",28)
-    font= pygame.font.Font("PressStart2P-Regular.ttf",44)
-    font_large= pygame.font.Font("PressStart2P-Regular.ttf",68)
+    #The pre game countdown screen, which loops on frames of animations and shows the gamename, player names and countdown.
+    font_small= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",28)
+    font= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",44)
+    font_large= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",68)
     game_surface=font.render(game_name,True,(255,255,255))
     p1_surface= font_small.render(player1,True,(255,255,255))
     p2_surface= font_small.render(player2,True,(255,255,255))
     Vs= font_large.render("Vs",True, (255,255,255))
     BG_COLOR = (30, 30, 60)
     screen.fill(BG_COLOR)
-    p1=pygame.image.load("p1 sprite 2.png")
-    p2=pygame.image.load("p2 sprite 2.png")
-    p1_2=pygame.image.load("p1 sprite 3.png")
-    p2_2=pygame.image.load("p2 sprite 3.png")
+    p1=pygame.image.load("Images/p1 sprite 2.png")
+    p2=pygame.image.load("Images/p2 sprite 2.png")
+    p1_2=pygame.image.load("Images/p1 sprite 3.png")
+    p2_2=pygame.image.load("Images/p2 sprite 3.png")
     p1s=[p1,p1_2]
     p2s=[p2,p2_2]
     for i in range(4):
@@ -183,8 +186,8 @@ def startscreen(screen,game_name):
 
 def leaderboard_data(screen,winner):
     screen = pygame.display.set_mode((1000, 900))
-    font= pygame.font.Font("PressStart2P-Regular.ttf",48)
-    fontsmall= pygame.font.Font("PressStart2P-Regular.ttf",24)
+    font= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",48)
+    fontsmall= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",24)
     BG_COLOR = (30, 30, 60)          
     #Top Text showing name of winner and the end text
     if winner=="Draw":
@@ -193,7 +196,7 @@ def leaderboard_data(screen,winner):
         text =f"{winner} Won!"
     end_text="Press 'Enter' to continue"
     #Setting up a side menu with options of metrics to sort the leaderboard
-    menu_font = pygame.font.Font("PressStart2P-Regular.ttf", 14)
+    menu_font = pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 14)
     menu_width = 200
     menu_item_height = 35
     menu_x = 630
@@ -278,6 +281,7 @@ def leaderboard_data(screen,winner):
                                         menu_width, menu_item_height)
                     if rect.collidepoint(mouse_pos):
                         selected_index = i
+        #The leaderboard data side menu to change it wrt the metrics selected.
         if selected_index!=last_index:
             last_index=selected_index
             if selected_index==0:
@@ -294,7 +298,6 @@ def leaderboard_data(screen,winner):
         menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
         menu_surface.fill((55, 55, 95, 220))
         screen.blit(menu_surface, (menu_x, menu_y))
-
         for i, texty in enumerate(items):
             y = menu_y + i * menu_item_height
             txt = menu_font.render(texty, True, (230, 230, 255))
@@ -308,16 +311,20 @@ def leaderboard_data(screen,winner):
 def postgame(screen,winner):
     screen = pygame.display.set_mode((1000, 700))
     pygame.display.set_caption("Mini Game Hub")
-    font= pygame.font.Font("PressStart2P-Regular.ttf",24)
+    font_large= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",44)
+    font= pygame.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",24)
     BG_COLOR = (30, 30, 60)          
     NORMAL_COLOR = (200, 200, 200)   
     HOVER_COLOR = (255, 255, 255)
     # Showing the winner and giving the player options to Continur or Quit, Continue opens the menu and Quit quits the game
     if winner=="Draw":
-        text ="It's a Draw!\n Wanna Play Again!!" 
+        text ="It's a Draw!"
+        text2= "Wanna Play Again!!" 
     else:
-        text =f"{winner} Won!\n Wanna Play Again!!"
-    text_surface = font.render(text, True, (255, 255, 255))  
+        text =f"{winner} Won!"
+        text2= "Wanna Play Again!!"
+    text_surface = font_large.render(text, True, (255, 255, 255))
+    text2_surface = font.render(text2, True, (255, 255, 255))   
     continue_button = pygame.Rect(350, 260, 200, 60)
     quit_button = pygame.Rect(350, 340, 200, 60)
     # Load firework frames
@@ -354,7 +361,7 @@ def postgame(screen,winner):
             y = np.random.randint(50, 650)
             fireworks.append([x, y, 0])
 
-        # Draw & update fireworks
+        # Draw & update fireworks, in the array. Each firework moves to the next frame every 0.125 seconds (8 frames per second).
         dt = clock.tick(60) / 1000  # time in seconds
         for fw in fireworks:
             x, y, frame_idx = fw
@@ -364,8 +371,9 @@ def postgame(screen,winner):
 
         # remove finished ones
         fireworks = [fw for fw in fireworks if fw[2] < len(frames)]
-        
-        screen.blit(text_surface,(300,150))
+        #showing the text and buttons
+        screen.blit(text_surface,(280,100))
+        screen.blit(text2_surface,(280,200))
         pygame.draw.rect(screen,c_color,continue_button,3)
         pygame.draw.rect(screen,q_color,quit_button,3)
         cont_text = font.render("Continue", True, (255, 255, 255))
@@ -391,9 +399,9 @@ def UpdateHistory(winner,loser,game_name):
         date = datetime.now().strftime("%Y-%m-%d")
         f.write(f"\n{winner},{loser},{date},{game_name}")
 def main():
+    #The main loop of the game.
     player1=sys.argv[1]
     player2=sys.argv[2]
-    global screen
     while True:
         screen = pygame.display.set_mode((1000, 700))
         pygame.display.set_caption("Mini Game Hub")

@@ -25,15 +25,15 @@ offsety=100
 sidex=72
 sidey=66
 row,colomn=7,7
-BG_Image= pg.image.load('Connect 4 board.png')    
+BG_Image= pg.image.load('Images/Connect 4 board.png')    
 BG_Image=pg.transform.scale(BG_Image, (700,700))
-red=pg.image.load('Red ball.png')
-yellow=pg.image.load('Yellow ball.png')
-green=pg.image.load('green sphere.png')
+red=pg.image.load('Images/Red ball.png')
+yellow=pg.image.load('Images/Yellow ball.png')
+green=pg.image.load('Images/green sphere.png')
 red=pg.transform.scale(red,(sidex,sidey))
 yellow=pg.transform.scale(yellow,(sidex,sidey+4))
 green=pg.transform.scale(green,(sidex,sidey))
-font= pg.font.Font("PressStart2P-Regular.ttf",24)
+font= pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf",24)
 pg.display.set_caption("Connect 4")
 class Connect4(general):
     def __init__(self,player1,player2,screen):
@@ -57,8 +57,8 @@ class Connect4(general):
                     self.screen.blit(yellow,(int(offsetx+col * sidex+3), int(offsety+rows*sidey+5)))
     
     def moveback(self,screen):
-        font = pg.font.Font("PressStart2P-Regular.ttf", 19)
-        small_font = pg.font.Font("PressStart2P-Regular.ttf", 16)
+        font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 19)
+        small_font = pg.font.Font("Fonts and Audio/PressStart2P-Regular.ttf", 16)
         BG_COLOR = (30, 30, 60)
         NORMAL_COLOR = (200, 200, 200)
         HOVER_COLOR = (255, 255, 255)
@@ -190,7 +190,7 @@ class Connect4(general):
         pg.display.update()
         #initializing
         pg.mixer.init()
-        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
         pg.mixer.music.play(-1)
         self.draw_lines()
         player = 1
@@ -231,7 +231,7 @@ class Connect4(general):
                         self.draw_lines()
                         self.draw_figures()
                         pg.mixer.init()
-                        pg.mixer.music.load('8-Bit-Indigestion.mp3')
+                        pg.mixer.music.load('Fonts and Audio/8-Bit-Indigestion.mp3')
                         pg.mixer.music.play(-1)
                     else:
                         return 0

@@ -1,5 +1,13 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage{graphicx} % Required for inserting images
+\usepackage{url} % Required for formatting URLs in bibilography
+\usepackage[hidelinks]{hyperref} % Required for hyperlinks in bibilography
+\usepackage{dirtree} % Required for directory structure
+\usepackage{tikz}  % Required for drawing the process flow diagram
+\usetikzlibrary{shapes, arrows} % Required for flowchart shapes and arrows
+\tikzstyle{box}     = [rectangle, draw, fill=blue!10,
+                        minimum width=3cm, minimum height=0.8cm]
+\tikzstyle{arrow}   = [thick, ->, >=stealth]
 
 \title{Report}
 \author{Prajwal and Vishesh}
@@ -10,6 +18,14 @@
 \maketitle
 \tableofcontents
 \clearpage
+\section{Design and Architecture}
+The design of the project is pretty simple, straightforward and a block based approach. \\
+The authentication into the game is handled by \texttt{main.sh} which takes usernames and passwords and manage them in users.tsv file.\\
+After authentication, the \texttt{game.py} is called which has the main code for the games, it has a generic class which is inherited by the three games- tic tac toe, connect four and othello.\\
+The game.py has funcions common in all games such as check win, change turn, current turn player,update history, etc.\\
+It also has some extra functions such as pregame countdown animation, postgame graph update, etc. which are intended for enhancing the UI and design of the game hub. These could have been added in the individual game files, but were added in the general class for code reusability. Hence most of the code possible is tried to be kept in the main file itself.\\
+Other function specific to games are written in the respective game classes, the game files also import the general class.\\
+
 \section{External Libraries Used}
 \begin{itemize}
     \item pygame -ce
@@ -22,6 +38,39 @@
     \item datetime
     \item subprocess
 \end{itemize}
+\section{Launching the game}
+After getting all the libraries, you can run the game by running \texttt{main.sh} in terminal, it will ask for login or registration of two players, then it will ask to select the game and then it will run the python script.\\
+Basic process flow diagram of the game is as follows-\\
+\begin{center}
+\begin{tikzpicture}[scale=0.8, transform shape, node distance=1.5cm]
+\node (auth) [box] {Authentication (\texttt{main.sh})};
+\node (new player) [box, below left of=auth, xshift=-5cm] {\shortstack{New Player-\\ Registration and store in \texttt{users.tsv}}};
+\node (existing player) [box, below right of=auth, xshift=5cm] {\shortstack{Existing Player-\\ Password check and Login}};
+\node (menu) [box, below of=auth, yshift=-4cm] {Game Logic (\texttt{game.py})};
+\node (game selection) [box, below of=menu] {Game Selection};
+\node (tic tac toe) [box, below left of=game selection, xshift=-3cm] {\texttt{tic\_tac\_toe.py}};
+\node (connect four) [box, below of=game selection] {\texttt{connect4.py}};
+\node (othello) [box, below right of=game selection, xshift=3cm] {\texttt{othello.py}};
+\node (leaderboard) [box, below of=menu, yshift=-7cm] {Leaderboard display (\texttt{leaderboard.sh})};
+\node (history) [box, below of=leaderboard] {History Graphs (\texttt{game.py}(update\_history, postgame))};
+\node (end) [box, below left of=history, xshift=-3cm] {End of Game};
+\node (continue) [box, below right of=history, xshift=3cm] {Continue to Menu};
+\draw [arrow] (auth) -- (new player);
+\draw [arrow] (auth) -- (existing player);
+\draw [arrow] (new player) |- (menu);
+\draw [arrow] (existing player) |- (menu);
+\draw [arrow] (menu) -- (game selection);
+\draw [arrow] (game selection) -- (tic tac toe);
+\draw [arrow] (game selection) -- (connect four);
+\draw [arrow] (game selection) -- (othello);
+\draw [arrow] (tic tac toe) |- (leaderboard);
+\draw [arrow] (connect four) -- (leaderboard);
+\draw [arrow] (othello) |- (leaderboard);
+\draw [arrow] (leaderboard) -- (history);
+\draw [arrow] (history) -- (end);
+\draw [arrow] (history) -- (continue);
+\end{tikzpicture}
+\end{center}
 
 \section{Features}
 
@@ -30,7 +79,7 @@ There are various Features we added to make the gameplay more interesting and en
 \begin{itemize}
     
 
-\item user authentication system using SHA
+\item user authentication system using SHA-256 hashing and tsv file storage
 \item multiplayer(2 player) games
 \item shows history of the players wins and losses
 \item uses graphs, etc to show data
@@ -40,6 +89,7 @@ There are various Features we added to make the gameplay more interesting and en
 \item sound effects for various actions such as clicking, etc
 \item background images which makes it look more attractive
 \item extra animation before start of each game
+\item added fireworks animation at the end of the game screen -\\ It is a loop of frames which initiate randomly and show the animation. Based on random generation and frzme shifting.
 
 \end{itemize}
 \clearpage
@@ -104,7 +154,14 @@ Solution- it was later announced that except in check win function, we can use f
 since tic tac toe was 10*10, to check win the diagonals, it was so difficult to check the non-main diagonals without using for loop.
 \\
 Solution-i got an idea that instead i can just check the 5*5 squares because here i wont have to check non main diagonals in 5*5, hence i made a set of all 5*5 squares and simplified it.
-
+\subsection{Text alignment with varying length of player names}
+it was difficult to align the text of player names with the character images in menu because the length of player names can vary and hence the text can be misaligned, which will affect the look of UI.
+\\
+Solution- I defined a rectangle box for the text(using \texttt{pygame.getRect}) and aligned the text in the center of that box, hence no matter what the length of the text is, it will always be aligned in the center of the box and hence with the character image.
+\subsection{Arrangement according to the background image for various games}
+it was difficult to arrange the figures etc according to the background image for various games, because each game has different background image and hence the arrangement for one game may not look good for another game.
+\\
+Solution- I made different arrangements for each game according to the background image by manually checking the offsets and side lengths, and also made some general arrangements which can be used in all games, such as the arrangement of player names and scores, etc.
 %you can add your hurdles...
 \clearpage
 \section{What would we do with 10 more hours}
@@ -121,6 +178,7 @@ We could add settings option in menu, in which user can control various things l
 \clearpage
 
 %add bibilography and citations
+\nocite{*}
 \bibliographystyle{plain}
 \bibliography{references}
 \end{document}
