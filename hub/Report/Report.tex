@@ -18,6 +18,7 @@
 \begin{document}
 
 \maketitle
+
 \tableofcontents
 \clearpage
 \section{Design and Architecture}
@@ -107,32 +108,7 @@ Basic process flow diagram of the game is as follows-\\
 \draw [arrow] (history) -- (continue);
 \end{tikzpicture}
 \end{center}
-\section{Images}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (1).jpeg}
-    \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (2).jpeg}\\
-    \vspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (3).jpeg}
-    \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00.jpeg}\\
-    \vspace{1cm}
-    \caption{Gameplay visuals -1}
-\end{figure}
 
-\begin{figure}[h]
-    \centering
-     \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01 (1).jpeg}
-    \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.02.jpeg}\\
-    \vspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01 (2).jpeg}
-    \hspace{1cm}
-    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01.jpeg}
-    \caption{Gameplay visuals -2}
-\end{figure}
-\clearpage
 \section{Features}
 
 There are various Features we added to make the gameplay more interesting and engaging, such as-
@@ -172,10 +148,17 @@ There are also functions about Updating History, Postgame update in the graphs u
 Generally all games have similar logic- run in loop, each time taking events and executing, updating the board array, for this calling some general functions like update board, change turn, current turn player, etc.
 Hence, for each game, only unique logics are explained below
 \subsection{Tic Tac Toe}
+It has a board of size 10*10. the winning criteria is to make a consecutive straight line of atleast 5 same pieces(X or O).\\
 for check win, we first check the rows, then colomns, then diagonal and anti diagonals
-for this i made a set of all 5*5 submatrices, then checked these conditions for each matrice
+for this i made a set of all 5*5 submatrices, then checked these conditions for each matrice.\\
+some general functions used are- draw line/circle, update board, etc 
+which does what the name suggest, for drawing, inbuilt functions of pygame are used.\\
 \subsection{Connect Four}
-same logic as tic tac toe, just the difference is here we can add new piece only at lowest available space in colomn
+Board size 7*7. the winning criteria is to make 4 same pieces in a straight line.\\
+same logic as tic tac toe, just the difference is here we can add new piece only at lowest available space in colomn.\\
+
+It has a special falling piece animation which is done by running a loop in which various frames are rendered with the piece's position changing(downwards). finally it stops at its corresponding final position.\\
+
 
 %write about the logic of adding falling animation
 \subsection{Othello}
@@ -191,13 +174,14 @@ the check win is called when no valid move is left, which simply counts the nmbe
 
 \subsection{Authentication System}
 %Vishesh
-The main.sh is the way to authentication in this project.The script handles login or registrations of players before launching the game. For each player, it reads a username and password, hashes the password with SHA-256, and checks it against users.tsv. New users get prompted to register with a password of at least 7 characters, returning users just get verified, and wrong passwords loop back to retry. Once both players are authenticated, their usernames are passed straight to game.py.
+The main.sh is the way to authentication in this project.The script handles login or registrations of players before launching the game. For each player, it reads a username and password, hashes the password with SHA-256, and checks it against users.tsv. New users get prompted to register with a password of at least 7 characters, returning users just get verified, and wrong passwords loop back to retry. Once both players are authenticated, their usernames are passed straight to game.py.\\
+ you can also manage your account- you can change your password or delete your user as well. Its done using if else statements and sed commands for substitution and deletion
 \subsection{Leaderboard}
 %Vishesh
 The Leaderboard.sh Code uses awk command to read history.csv.\\ The awk command uses associative array to count about wins losses and win/loss ratio (equal to wins of p if losses is 0). Using formatted printing the table is printed for all games using a loop.\\  Another task is to print according to different metrics. For this we pass the metrics as an argument for the bash script. According to that argument an appropriate piped sort command does the sorting for the leaderboard table.\\
 Later the Leaderboard data funcion uses the history.csv and leaderboard to make a bar graph and pie chart using MatPlotLib.
 
-\clearpage
+%\clearpage
 
 \section{Retrospective}
 \subsection{axis}
@@ -224,7 +208,7 @@ it was difficult to arrange the figures etc according to the background image fo
 \\
 Solution- I made different arrangements for each game according to the background image by manually checking the offsets and side lengths, and also made some general arrangements which can be used in all games, such as the arrangement of player names and scores, etc.
 %you can add your hurdles...
-\clearpage
+%\clearpage
 \section{What would we do with 10 more hours}
 \subsection{Add new games}
 With 10 more hours, we could add one more board game like checkers, chess,e.t.c.
@@ -236,10 +220,39 @@ add more animations, try to increase smoothness in animations
 We could optimise our existing code so that it could run faster, use lesser memory
 \subsection{Add settings}
 We could add settings option in menu, in which user can control various things like volume, e.t.c.
-\clearpage
+%\clearpage
 
 %add bibilography and citations
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{references}
+
+\clearpage
+\section{Images}
+At last, here are some gameplay visuals...
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (1).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (2).jpeg}\\
+    \vspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00 (3).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.00.jpeg}\\
+    \vspace{1cm}
+    \caption{Gameplay visuals -1}
+\end{figure}
+%ek page pe 8 images aa hi nahi rahe
+\begin{figure}[h]
+    \centering
+     \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01 (1).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.02.jpeg}\\
+    \vspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01 (2).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{WhatsApp Image 2026-04-29 at 16.53.01.jpeg}
+    \caption{Gameplay visuals -2}
+\end{figure}
+\clearpage
 \end{document}
