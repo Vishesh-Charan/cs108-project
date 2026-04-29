@@ -1,9 +1,11 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx} % Required for inserting images
+\usepackage{tikz}  % Required for drawing the process flow diagram
+\usetikzlibrary{positioning} %to position the images
 \usepackage{url} % Required for formatting URLs in bibilography
 \usepackage[hidelinks]{hyperref} % Required for hyperlinks in bibilography
 \usepackage{dirtree} % Required for directory structure
-\usepackage{tikz}  % Required for drawing the process flow diagram
+
 \usetikzlibrary{shapes, arrows} % Required for flowchart shapes and arrows
 \tikzstyle{box}     = [rectangle, draw, fill=blue!10,
                         minimum width=3cm, minimum height=0.8cm]
@@ -38,7 +40,41 @@ Other function specific to games are written in the respective game classes, the
     \item datetime
     \item subprocess
 \end{itemize}
-\section{Launching the game}
+\clearpage
+\section{Installation and setup}
+installed python and all the libraries mentioned in "libraries used section".\\
+setup on github (made an account on github website).\\
+code editors used generally - vs code, overleaf.
+
+\section{Directory structure}
+
+
+\dirtree{%
+.1 hub.
+.2 {Fonts and Audio}.
+%.3 8-Bit-Indigestion.mp3.
+%.3 PressStart2P-Regular.ttf.
+.2 Games.
+.3 pycache.
+.3 connect4.py.
+.3 othello.py.
+.3 tictactoe.py.
+.2 Images.
+.2 Report.
+.3 Makefile.
+.3 Report.pdf.
+.3 Report.tex.
+.3 references.bib.
+.2 {firework frames}.
+.2 game.py.
+.2 history.csv.
+.2 leaderboard.sh.
+.2 main.sh.
+.2 users.tsv.
+}
+\clearpage
+
+\section{Launching the game(Usage)}
 After getting all the libraries, you can run the game by running \texttt{main.sh} in terminal, it will ask for login or registration of two players, then it will ask to select the game and then it will run the python script.\\
 Basic process flow diagram of the game is as follows-\\
 \begin{center}
@@ -71,7 +107,32 @@ Basic process flow diagram of the game is as follows-\\
 \draw [arrow] (history) -- (continue);
 \end{tikzpicture}
 \end{center}
+\section{Images}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (1).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (2).jpeg}\\
+    \vspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00 (3).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.00.jpeg}\\
+    \vspace{1cm}
+    \caption{Gameplay visuals -1}
+\end{figure}
 
+\begin{figure}[h]
+    \centering
+     \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01 (1).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.02.jpeg}\\
+    \vspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01 (2).jpeg}
+    \hspace{1cm}
+    \includegraphics[width=0.4\textwidth]{../images/pdf_images/WhatsApp Image 2026-04-29 at 16.53.01.jpeg}
+    \caption{Gameplay visuals -2}
+\end{figure}
+\clearpage
 \section{Features}
 
 There are various Features we added to make the gameplay more interesting and engaging, such as-
@@ -138,7 +199,7 @@ Later the Leaderboard data funcion uses the history.csv and leaderboard to make 
 
 \clearpage
 
-\section{Hurdles Faced and how we Overcame them}
+\section{Retrospective}
 \subsection{axis}
 it was very difficult for us to understand the concept of axis, we tried a lot of things - reading documents, watched videos but still it wasnt clear visually.\\
 
